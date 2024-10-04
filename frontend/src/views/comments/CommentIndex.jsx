@@ -110,12 +110,12 @@ export default function CommentIndex() {
     setErrorsOnDelete(null);
   };
 
-  const onDelete = () => {
-    //console.log("Delete Method");
-    //console.log("Selected Record:", selectedRecord);
+  const onDelete = (e) => {
+    e.preventDefault();
     axiosClient
       .delete(`/comments/${selectedRecord.id}`)
       .then(() => {
+        //This another option to avoid reloading all the comments history.
         //setRecords(records.filter((record) => record.id !== selectedRecord.id));
         getData();
         setIsDeleteModalOpen(false);
@@ -131,7 +131,10 @@ export default function CommentIndex() {
   return (
     <div className="mt-5 mb-5">
       <div className="bg-white p-3 rounded-lg shadow-lg mb-7">
-        <PageTitle title={"Leave Comments"} />
+        <PageTitle
+          title={comment.id ? "Edit Comment" : "Leave Comments"}
+          classes={`px-2`}
+        />
         <form className="mt-5" onSubmit={onSubmit}>
           <div className="flex flex-wrap items-center mb-3">
             {comment.id && (
@@ -246,17 +249,19 @@ export default function CommentIndex() {
               </li>
             ))}
 
-          {!loading && !records.length >= 1 && (
+          {!loading && records.length <= 0 && (
             <AlertMessage
               message="Records not found."
               classes={`bg-yellow-300 font-bold text-gray-700 text-sm text-center`}
             />
           )}
 
+          {/* This is the Delete Modal Component */}
+
           <Modal
             isOpen={isDeleteModalOpen}
             onClose={handleCloseDeleteModal}
-            title="Atención!"
+            title="Attention!"
             onConfirm={onDelete}
           >
             <p className="text-center">
