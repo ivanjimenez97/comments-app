@@ -129,8 +129,8 @@ export default function CommentIndex() {
   };
 
   return (
-    <div className="mt-5 mb-5">
-      <div className="bg-white p-3 rounded-lg shadow-lg mb-7">
+    <div className="mt-5 mb-5 block 2xl:flex 2xl:justify-center">
+      <div className="bg-white relative h-fit overflow-y-auto p-3 rounded-lg shadow-lg mb-7 max-w-4xl 2xl:mx-2">
         <PageTitle
           title={comment.id ? "Edit Comment" : "Leave Comments"}
           classes={`px-2`}
@@ -151,7 +151,7 @@ export default function CommentIndex() {
                 </p>
               </div>
             )}
-            <div className="basis-full 2xl:basis-1/2 px-2 mb-4">
+            <div className="basis-full px-2 mb-4">
               <label htmlFor="email" className="font-medium w-full mb-3">
                 Email:
               </label>
@@ -168,7 +168,7 @@ export default function CommentIndex() {
               />
             </div>
 
-            <div className="basis-full 2xl:basis-1/2 px-2 mb-4">
+            <div className="basis-full px-2 mb-4">
               <label htmlFor="description" className="font-medium w-full mb-3">
                 Description:
               </label>
@@ -204,7 +204,7 @@ export default function CommentIndex() {
         </form>
       </div>
 
-      <div className="bg-white p-5 rounded-lg shadow-lg">
+      <div className="bg-white p-5 rounded-lg shadow-lg  max-w-4xl 2xl:mx-2">
         <PageTitle title={"Comments History"} classes={`mb-5`} />
         <ul>
           {/* This part of the code is displayed when loading is set to true */}
