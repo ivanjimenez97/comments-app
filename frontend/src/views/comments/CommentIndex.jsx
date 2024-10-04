@@ -1,3 +1,4 @@
+//CommentIndex.jsx
 import { useEffect, useState } from "react";
 import PageTitle from "../../components/base/PageTitle";
 import axiosClient from "../../AxiosClient";
@@ -115,7 +116,7 @@ export default function CommentIndex() {
     axiosClient
       .delete(`/comments/${selectedRecord.id}`)
       .then(() => {
-        //This another option to avoid reloading all the comments history.
+        //This another option to avoid reloading all the comments history by sending requests to the api.
         //setRecords(records.filter((record) => record.id !== selectedRecord.id));
         getData();
         setIsDeleteModalOpen(false);
