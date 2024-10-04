@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  # Node.js Service
+  api:
+    container_name: gym-api
+    build:
+      context: ./ # Path to the directory containing your Node.js app (Dockerfile should be here)
+      dockerfile: Dockerfile # Dockerfile to build the Node.js application
+    command: npm run dev
+    ports:
+      - "5000:5000" # Map local port 3000 to container port 3000 (API exposed on localhost:3000)
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=iDev@12345#!
+      - DB_NAME=gymdb
+    volumes:
+      - ./:/usr/src/app # Mount current directory to /usr/src/app inside the container (for hot reloading)
+    depends_on:
+      - db # Ensure the database service starts before the Node.js app
+
+  # MySQL Service
+  db:
+    container_name: mysql-db
+    image: mysql:8.0 # MySQL version 8.0
+    ports:
+      - "3307:3307" # Map local port 3306 to container port 3306 (MySQL default port)
+    environment:
+      - MYSQL_ROOT_PASSWORD=iDev@12345#! # MySQL root password
+      - MYSQL_DATABASE=gymdb # Database name
+    volumes:
+      - mysql_data:/var/lib/mysql # Persist the database data on the host machine
+
+# Define volumes (persistent storage)
+volumes:
+  mysql_data:
+    driver: local
