@@ -77,7 +77,7 @@ const CommentController = {
         description: description,
       });
 
-      res.json({
+      res.status(201).json({
         record: record,
         message: "Record updated successfully.",
       });

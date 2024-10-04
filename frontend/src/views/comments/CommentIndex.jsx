@@ -10,13 +10,18 @@ import { FormatLongDateTime } from "../../components/hooks/FormatDate.jsx";
 export default function CommentIndex() {
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
-  const [email, setEmail] = useState(null);
-  const [description, setDescription] = useState(null);
+
+  const [comment, setComment] = useState({
+    id: null,
+    email: "",
+    description: "",
+    createdAt: null,
+    updatedAt: null,
+  });
 
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [errorsOnDelete, setErrorsOnDelete] = useState(null);
 
   const getData = async () => {
@@ -36,34 +41,60 @@ export default function CommentIndex() {
     getData();
   }, []);
 
-  const onAdd = async () => {
-    const payload = {
-      email: email,
-      description: description,
-    };
-
-    try {
-      const res = axiosClient.post("/comments", payload);
-      if (res.status === 201) {
-        setEmail(null);
-        setDescription(null);
+  const onSubmit = async () => {
+    console.log("Current Data", comment);
+    if (comment.id) {
+      try {
+        const res = axiosClient.patch(`/comments/${comment.id}`, comment);
+        if (res.status === 201) {
+          setComment({
+            id: null,
+            email: "",
+            description: "",
+            createdAt: null,
+            updatedAt: null,
+          });
+          getData();
+        }
+      } catch (error) {
+        console.log("Create Comment Error", error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      try {
+        const res = axiosClient.post("/comments", comment);
+        if (res.status === 201) {
+          setComment({
+            id: null,
+            email: "",
+            description: "",
+            createdAt: null,
+            updatedAt: null,
+          });
+          getData();
+        }
+      } catch (error) {
+        console.log("Edit Comment Error", error);
+      }
     }
   };
 
   // ***** EDIT MODAL *****
 
-  const handleEditRecord = (record) => {
-    setSelectedRecord(record);
-    setIsEditModalOpen(true);
+  const setEditComment = (record) => {
+    setComment(record);
+    console.log("Edit Record Data", record);
   };
 
-  const handleCloseEditModal = () => {
-    setIsEditModalOpen(false);
-    setSelectedRecord(null);
-    setErrorsOnDelete(null);
+  const clearComment = (e) => {
+    e.preventDefault();
+
+    setComment({
+      id: null,
+      email: "",
+      description: "",
+      createdAt: null,
+      updatedAt: null,
+    });
   };
 
   // ***** DELETE MODAL *****
@@ -101,8 +132,22 @@ export default function CommentIndex() {
     <div className="mt-5 mb-5">
       <div className="bg-white p-3 rounded-lg shadow-lg mb-7">
         <PageTitle title={"Leave Comments"} />
-        <form className="mt-5" onSubmit={onAdd}>
-          <div className="flex flex-wrap items-center mb-4">
+        <form className="mt-5" onSubmit={onSubmit}>
+          <div className="flex flex-wrap items-center mb-3">
+            {comment.id && (
+              <div className="basis-1/2 px-2 mb-4">
+                <p htmlFor="email" className="font-medium w-full mb-0">
+                  ID: {comment.id}
+                </p>
+              </div>
+            )}
+            {comment.createdAt && (
+              <div className="basis-1/2 px-2 mb-3">
+                <p htmlFor="email" className="font-medium w-full mb-0 text-end">
+                  <FormatLongDateTime date={comment.createdAt} />
+                </p>
+              </div>
+            )}
             <div className="basis-full 2xl:basis-1/2 px-2 mb-4">
               <label htmlFor="email" className="font-medium w-full mb-3">
                 Email:
@@ -111,8 +156,10 @@ export default function CommentIndex() {
                 type="text"
                 name="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={comment.email}
+                onChange={(e) =>
+                  setComment({ ...comment, email: e.target.value })
+                }
                 className="bg-white border rounded-lg p-2 w-full"
                 required
               />
@@ -125,19 +172,29 @@ export default function CommentIndex() {
               <textarea
                 name="description"
                 id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="bg-white border rounded-lg p-2 w-full"
+                value={comment.description}
+                onChange={(e) =>
+                  setComment({ ...comment, description: e.target.value })
+                }
+                className="bg-white border rounded-lg p-2 w-full h-auto"
                 required
               ></textarea>
             </div>
 
             <div className="basis-full text-end px-2 mb-4">
+              {comment.email && comment.description && (
+                <button
+                  className="bg-white border border-zinc-500 hover:border-zinc-300 hover:bg-zinc-300 px-3 py-2 rounded-lg text-zinc-700 hover:text-white me-5"
+                  onClick={(e) => clearComment(e)}
+                >
+                  Clear
+                </button>
+              )}
               <button
                 type="submit"
                 className="bg-green-500 px-3 py-2 rounded-lg text-white"
               >
-                Comment
+                {comment.id ? "Update" : "Comment"}
               </button>
             </div>
           </div>
@@ -175,7 +232,7 @@ export default function CommentIndex() {
                 <div className="flex">
                   <button
                     className="px-3 py-2 bg-indigo-500 rounded-lg text-white me-5"
-                    onClick={() => handleEditRecord(record)}
+                    onClick={() => setEditComment(record)}
                   >
                     <Edit className="w-[1.25rem] h-[1.25rem]" />
                   </button>
