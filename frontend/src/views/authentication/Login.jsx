@@ -3,6 +3,8 @@ import axiosClient from "../../AxiosClient";
 import { useAuthContext } from "../../contexts/AuthProvider";
 import Cookies from "js-cookie";
 
+import AlertMessage from "../../components/base/AlertMessage.jsx";
+
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -35,12 +37,8 @@ export default function Login() {
       .catch((error) => {
         console.log(error);
         const response = error.response;
-        if (response && response.status === 422) {
-          setMessage(response.data.errors);
-        } else {
-          setMessage({
-            email: [response.data.message],
-          });
+        if (response && response.status === 401) {
+          setMessage(response.data.message);
         }
       });
 
@@ -60,11 +58,12 @@ export default function Login() {
       id="login"
       className="bg-white py-8 px-4 lg:px-10 w-full max-w-[400px] lg:max-w-[450px] h-fit text-center rounded-lg"
     >
-      <h2 className="text-3xl mb-5 font-bold">Login: {testToken}</h2>
+      <h2 className="text-3xl mb-5 font-bold">Login</h2>
       {message && (
-        <div className="alert">
-          <p>{message}</p>
-        </div>
+        <AlertMessage
+          classes={"bg-red-500 font-bold text-white text-sm text-center mb-5"}
+          message={message}
+        />
       )}
       <form className="w-full" onSubmit={(e) => onSubmit(e)}>
         <div className="w-full mb-5 flex items-center justify-center">
