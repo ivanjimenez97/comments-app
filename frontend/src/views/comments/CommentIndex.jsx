@@ -4,12 +4,20 @@ import axiosClient from "../../AxiosClient";
 import Edit from "../../components/icons/Edit";
 import Delete from "../../components/icons/Delete";
 import AlertMessage from "../../components/base/AlertMessage";
+import Modal from "../../components/base/Modal.jsx";
+import { FormatLongDateTime } from "../../components/hooks/FormatDate.jsx";
 
 export default function CommentIndex() {
   const [loading, setLoading] = useState(false);
   const [records, setRecords] = useState([]);
   const [email, setEmail] = useState(null);
   const [description, setDescription] = useState(null);
+
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const [errorsOnDelete, setErrorsOnDelete] = useState(null);
 
   const getData = async () => {
     setLoading(true);
@@ -43,6 +51,50 @@ export default function CommentIndex() {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  // ***** EDIT MODAL *****
+
+  const handleEditRecord = (record) => {
+    setSelectedRecord(record);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedRecord(null);
+    setErrorsOnDelete(null);
+  };
+
+  // ***** DELETE MODAL *****
+
+  const handleDeleteRecord = (record) => {
+    setSelectedRecord(record);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleCloseDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedRecord(null);
+    setErrorsOnDelete(null);
+  };
+
+  const onDelete = () => {
+    //console.log("Delete Method");
+    //console.log("Selected Record:", selectedRecord);
+    axiosClient
+      .delete(`/comments/${selectedRecord.id}`)
+      .then(() => {
+        //setRecords(records.filter((record) => record.id !== selectedRecord.id));
+        getData();
+        setIsDeleteModalOpen(false);
+        setSelectedRecord(null);
+        setErrorsOnDelete(null);
+      })
+      .catch((error) => {
+        //console.error("Error deleting record:", error);
+        setErrorsOnDelete(error.response.data.message);
+      });
   };
 
   return (
@@ -114,14 +166,23 @@ export default function CommentIndex() {
                 <h3 className="text-lg text-indigo-700 font-bold">
                   {record.email}
                 </h3>
-                <p className="font-normal mb-3 text-zinc-500">
+                <p className="font-normal text-zinc-500">
                   {record.description}
                 </p>
+                <p className="font-normal mb-3 text-zinc-400">
+                  <FormatLongDateTime date={record.createdAt} />
+                </p>
                 <div className="flex">
-                  <button className="px-3 py-2 bg-indigo-500 rounded-lg text-white me-5">
+                  <button
+                    className="px-3 py-2 bg-indigo-500 rounded-lg text-white me-5"
+                    onClick={() => handleEditRecord(record)}
+                  >
                     <Edit className="w-[1.25rem] h-[1.25rem]" />
                   </button>
-                  <button className="px-3 py-2 bg-red-500 rounded-lg text-white">
+                  <button
+                    className="px-3 py-2 bg-red-500 rounded-lg text-white"
+                    onClick={() => handleDeleteRecord(record)}
+                  >
                     <Delete className="w-[1.25rem] h-[1.25rem]" />
                   </button>
                 </div>
@@ -134,6 +195,42 @@ export default function CommentIndex() {
               classes={`bg-yellow-300 font-bold text-gray-700 text-sm text-center`}
             />
           )}
+
+          <Modal
+            isOpen={isDeleteModalOpen}
+            onClose={handleCloseDeleteModal}
+            title="Atención!"
+            onConfirm={onDelete}
+          >
+            <p className="text-center">
+              Are you sure you want to delete this record?
+            </p>
+            <br />
+            {errorsOnDelete && (
+              <AlertMessage
+                classes={"bg-red-500 text-white"}
+                message={
+                  <div className="w-full">
+                    <p className="font-medium text-center">
+                      An error occurred while trying to delete the record.
+                    </p>{" "}
+                    <br />
+                    <p className="font-normal">{errorsOnDelete}</p>
+                  </div>
+                }
+              />
+            )}
+            <p className="font-normal text-center">
+              <b>Email:</b> <br />
+              {selectedRecord && selectedRecord.email}
+            </p>
+            <p className="font-normal text-center">
+              <b>Creation Date:</b> <br />
+              {selectedRecord && (
+                <FormatLongDateTime date={selectedRecord.createdAt} />
+              )}
+            </p>
+          </Modal>
         </ul>
       </div>
     </div>

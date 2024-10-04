@@ -9,7 +9,7 @@ export const FormatLongDateTime = (props) => {
     second: "numeric",
     hour12: "true",
   };
-  const formattedDate = date.toLocaleDateString("es-US", options);
+  const formattedDate = date.toLocaleDateString("en-US", options);
   return formattedDate;
 };
 
@@ -23,7 +23,7 @@ export const ShortDateTimeFormat = (props) => {
     minute: "2-digit",
     second: "2-digit",
   };
-  const formattedDate = Intl.DateTimeFormat("es-US", options).format(date);
+  const formattedDate = Intl.DateTimeFormat("en-US", options).format(date);
   return formattedDate;
 };
 
@@ -38,7 +38,7 @@ export const FormatDateTimeValue = (date) => {
     minute: "2-digit",
     second: "2-digit",
   };
-  const formattedDate = Intl.DateTimeFormat("es-US", options).format(
+  const formattedDate = Intl.DateTimeFormat("en-US", options).format(
     currentDate
   );
   return formattedDate;
