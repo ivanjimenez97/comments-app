@@ -1,5 +1,6 @@
-// Delete.jsx icon component
-export default function Delete(props) {
+import React, { SVGProps } from "react";
+
+export default function Delete(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

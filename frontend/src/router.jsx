@@ -8,6 +8,7 @@ import UsersIndex from "./views/users/UsersIndex";
 import CreateUser from "./views/users/CreateUser";
 import EditUser from "./views/users/EditUser";
 import CommentIndex from "./views/comments/CommentIndex";
+import CommentIndexTs from "./views/comment-ts/CommentIndexTs.tsx";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,11 @@ const router = createBrowserRouter([
       {
         path: "/comments",
         element: <CommentIndex />,
+      },
+      // ***** Comments TS Version *****
+      {
+        path: "/comments-ts-version",
+        element: <CommentIndexTs />,
       },
       // ***** USERS *****
       {

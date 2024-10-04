@@ -1,6 +1,22 @@
-// Modal.jsx
-const Modal = ({ isOpen, onClose, onConfirm, title, children }) => {
+import React, { ReactNode } from "react";
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  children?: ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
+  children,
+}) => {
   if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-10">
       <div className="bg-white rounded-lg p-3 shadow-lg relative">

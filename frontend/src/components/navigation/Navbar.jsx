@@ -5,6 +5,7 @@ import { useAuthContext } from "../../contexts/AuthProvider.jsx";
 import MdiLightViewDashboard from "../icons/MdiLightViewDashboard";
 import UsersGroupSolid from "../icons/UsersGroupSolid";
 import CommentsIcon from "../icons/CommentsIcon.jsx";
+import CommentTsIcon from "../icons/CommentTsIcon.jsx";
 
 export default function Navbar() {
   const { user, setUser, setToken } = useAuthContext();
@@ -76,8 +77,20 @@ export default function Navbar() {
                   : "text-gray-700 hover:bg-indigo-100 flex items-center p-3"
               }
             >
-              <CommentsIcon />
+              <CommentsIcon className="w-6 h-6" />
               <span className="ml-3">Comments</span>
+            </NavLink>
+
+            <NavLink
+              to={"/comments-ts-version"}
+              className={({ isActive }) =>
+                isActive
+                  ? "bg-indigo-500 text-white flex items-center p-3"
+                  : "text-gray-700 hover:bg-indigo-100 flex items-center p-3"
+              }
+            >
+              <CommentTsIcon className="w-6 h-6" />
+              <span className="ml-3">Comments TS Version</span>
             </NavLink>
 
             <NavLink

@@ -1,3 +1,4 @@
+// FormatDate.jsx file
 export const FormatLongDateTime = (props) => {
   const date = new Date(props.date);
   const options = {

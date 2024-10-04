@@ -1,5 +1,6 @@
-// Edit.jsx icon component
-export default function Edit(props) {
+import React, { SVGProps } from "react";
+
+export default function Edit(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
