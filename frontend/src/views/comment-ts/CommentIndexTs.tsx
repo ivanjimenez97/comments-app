@@ -212,7 +212,7 @@ export default function CommentIndexTs() {
                 key={index}
                 className="bg-white border border-gray-200 rounded-lg hover:shadow-lg px-5 py-3 mb-5"
               >
-                <h3 className="font-medium">
+                <h3 className="text-lg font-bold text-blue-700">
                   {record.id}. {record.email}
                 </h3>
                 <p>{record.description}</p>

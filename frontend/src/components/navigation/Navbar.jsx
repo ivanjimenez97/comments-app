@@ -66,7 +66,7 @@ export default function Navbar() {
                   : "text-gray-700 hover:bg-indigo-100 flex items-center p-3"
               }
             >
-              <MdiLightViewDashboard />
+              <MdiLightViewDashboard className="w-6 h-6" />
               <span className="ml-3">Dashboard</span>
             </NavLink>
             <NavLink
@@ -85,8 +85,8 @@ export default function Navbar() {
               to={"/comments-ts-version"}
               className={({ isActive }) =>
                 isActive
-                  ? "bg-indigo-500 text-white flex items-center p-3"
-                  : "text-gray-700 hover:bg-indigo-100 flex items-center p-3"
+                  ? "bg-blue-500 text-white flex items-center p-3"
+                  : "text-gray-700 hover:bg-blue-100 flex items-center p-3"
               }
             >
               <CommentTsIcon className="w-6 h-6" />
