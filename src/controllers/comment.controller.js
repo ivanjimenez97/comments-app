@@ -6,9 +6,8 @@ const CommentController = {
     try {
       const comments = await Comment.findAll();
 
-      res.json({
+      res.status(201).json({
         records: comments,
-        status: 201,
       });
     } catch (error) {
       return res.status(500).json({
@@ -43,6 +42,14 @@ const CommentController = {
     // Logic to create a new Comment
     try {
       const { email, description } = req.body;
+
+      if (!email) {
+        return res.status(500).json({ message: "Email is required." });
+      }
+
+      if (!description) {
+        return res.status(500).json({ message: "Description is required." });
+      }
 
       const record = await Comment.create({
         email: email,
